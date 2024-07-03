@@ -4,16 +4,16 @@ import {
   useMaterialReactTable,
   type MRT_ColumnDef,
 } from "material-react-table";
-import { data, type Person } from "./makedata";
+import { type Person } from "@/types";
+import { data } from "../data/tableData";
 
-const Example = () => {
+const ColumnOrderingTable = () => {
   const columns = useMemo<MRT_ColumnDef<Person>[]>(
     () => [
       {
         accessorKey: "firstName",
         header: "First Name",
       },
-      //column definitions...
       {
         accessorKey: "lastName",
         header: "Last Name",
@@ -45,4 +45,4 @@ const Example = () => {
   return <MaterialReactTable table={table} />;
 };
 
-export default Example;
+export default ColumnOrderingTable;
