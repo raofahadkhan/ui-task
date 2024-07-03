@@ -4,37 +4,13 @@ import {
   useMaterialReactTable,
   type MRT_ColumnDef,
 } from "material-react-table";
-import { type Person } from "@/types";
-import { data } from "../data/tableData";
+import { ColumnOrderingTablePropType, type Person } from "@/types";
 
-const ColumnOrderingTable = () => {
-  const columns = useMemo<MRT_ColumnDef<Person>[]>(
-    () => [
-      {
-        accessorKey: "firstName",
-        header: "First Name",
-      },
-      {
-        accessorKey: "lastName",
-        header: "Last Name",
-      },
-      {
-        accessorKey: "address",
-        header: "Address",
-      },
-      {
-        accessorKey: "city",
-        header: "City",
-      },
-      //end
-      {
-        accessorKey: "state",
-        enableColumnOrdering: false, //disable column ordering for this column,
-        header: "State",
-      },
-    ],
-    []
-  );
+const ColumnOrderingTable: React.FC<ColumnOrderingTablePropType> = ({
+  columnsHeaders,
+  data,
+}) => {
+  const columns = useMemo<MRT_ColumnDef<Person>[]>(() => columnsHeaders, []);
 
   const table = useMaterialReactTable({
     columns,
