@@ -28,6 +28,24 @@ export default function Home() {
     },
   ];
 
+  const columnHeadings1 = [
+    {
+      accessorKey: "userId",
+      header: "User Id",
+    },
+    {
+      accessorKey: "id",
+      header: "Id",
+    },
+    {
+      accessorKey: "title",
+      header: "Title",
+    },
+    {
+      accessorKey: "completed",
+      header: "Completed",
+    },
+  ];
   const [posts, setPosts] = useState<Post[]>([]);
 
   useEffect(() => {
@@ -46,7 +64,7 @@ export default function Home() {
       <br />
       <br />
       <ColumnOrderingTable
-        columnsHeaders={columnHeadings}
+        columnsHeaders={columnHeadings1}
         data={posts as unknown as Person[]}
       />
     </div>
