@@ -8,7 +8,19 @@ export interface Person {
   state: string;
 }
 
+export interface Headers {
+  accessorKey: string;
+  header: string;
+}
+
 export interface ColumnOrderingTablePropType {
   columnsHeaders: MRT_ColumnDef<Person>[];
   data: Person[];
+}
+
+export interface Post {
+  userId: number;
+  id: number;
+  title: number;
+  completed: boolean;
 }
