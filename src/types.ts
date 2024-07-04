@@ -24,3 +24,16 @@ export interface Post {
   title: number;
   completed: boolean;
 }
+
+export interface RowData {
+  id: number;
+  name: string;
+  age: number;
+  email: string;
+}
+
+export interface Column {
+  key: keyof RowData;
+  label: string;
+  direction?: "asc" | "desc";
+}

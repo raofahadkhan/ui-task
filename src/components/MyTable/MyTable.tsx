@@ -1,19 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
-
-interface RowData {
-  id: number;
-  name: string;
-  age: number;
-  email: string;
-}
-
-interface Column {
-  key: keyof RowData;
-  label: string;
-  direction?: "asc" | "desc";
-}
+import { RowData, Column } from "@/types";
+import { sortData, reorderColumns } from "@/utils/MyTable";
+import ColumnHeader from "@/components/MyTable/ColumnHeader";
+import TableBody from "@/components/MyTable/TableBody";
 
 const MyTable: React.FC = () => {
   const [data, setData] = useState<RowData[]>([
@@ -53,16 +44,7 @@ const MyTable: React.FC = () => {
     }
     setSortConfig({ key, direction });
 
-    const sortedData = [...data].sort((a, b) => {
-      if (a[key] < b[key]) {
-        return direction === "asc" ? -1 : 1;
-      }
-      if (a[key] > b[key]) {
-        return direction === "asc" ? 1 : -1;
-      }
-      return 0;
-    });
-
+    const sortedData = sortData(data, key, direction);
     setData(sortedData);
   };
 
@@ -78,10 +60,11 @@ const MyTable: React.FC = () => {
 
   const handleDrop = () => {
     if (draggingColumnIndex !== null && draggingOverColumnIndex !== null) {
-      const reorderedColumns = [...columns];
-      const [removed] = reorderedColumns.splice(draggingColumnIndex, 1);
-      reorderedColumns.splice(draggingOverColumnIndex, 0, removed);
-
+      const reorderedColumns = reorderColumns(
+        columns,
+        draggingColumnIndex,
+        draggingOverColumnIndex
+      );
       setColumns(reorderedColumns);
     }
 
@@ -95,47 +78,20 @@ const MyTable: React.FC = () => {
         <thead>
           <tr>
             {columns.map((column, index) => (
-              <th
+              <ColumnHeader
                 key={column.key}
-                className="py-2 px-4 border-b cursor-pointer text-center"
-                draggable
-                onClick={() => handleSort(column.key)}
-                onDragStart={() => handleDragStart(index)}
-                onDragOver={(e) => {
-                  e.preventDefault(); // Allow drop
-                  handleDragOver(index);
-                }}
+                column={column}
+                index={index}
+                onSort={handleSort}
+                onDragStart={handleDragStart}
+                onDragOver={handleDragOver}
                 onDrop={handleDrop}
-                onDragEnd={handleDrop}
-              >
-                {column.label}
-              </th>
+              />
             ))}
             <th className="py-2 px-4 border-b text-center">Actions</th>
           </tr>
         </thead>
-        <tbody>
-          {data.map((row) => (
-            <tr key={row.id}>
-              {columns.map((column) => (
-                <td
-                  key={`${row.id}-${column.key}`}
-                  className="py-2 px-4 border-b text-center"
-                >
-                  {row[column.key]}
-                </td>
-              ))}
-              <td className="py-2 px-4 border-b text-center">
-                <button
-                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded"
-                  onClick={() => handleDelete(row.id)}
-                >
-                  Delete
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
+        <TableBody data={data} columns={columns} onDelete={handleDelete} />
       </table>
     </div>
   );

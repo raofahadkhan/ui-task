@@ -1,6 +1,5 @@
-// app/page.js
 "use client";
-import MyTable from "@/components/MyTable";
+import MyTable from "@/components/MyTable/MyTable";
 
 export default function Home() {
   return (
