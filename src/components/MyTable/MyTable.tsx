@@ -19,9 +19,10 @@ const DynamicTable = <T extends { id: number }>({ initialData, initialColumns, i
   const [draggingColumnIndex, setDraggingColumnIndex] = useState<number | null>(null);
   const [draggingOverColumnIndex, setDraggingOverColumnIndex] = useState<number | null>(null);
   const [filterValues, setFilterValues] = useState<{ [key in keyof T]?: string }>({});
+  const [originalData, setOriginalData] = useState<T[]>(initialData);
 
   useEffect(() => {
-    const filteredData = initialData.filter((row) =>
+    const filteredData = originalData.filter((row) =>
       Object.keys(filterValues).every((filterKey) => {
         const filterValue = filterValues[filterKey as keyof T];
         if (filterValue) {
@@ -34,11 +35,18 @@ const DynamicTable = <T extends { id: number }>({ initialData, initialColumns, i
       })
     );
     setData(filteredData);
-  }, [filterValues, initialData]);
+  }, [filterValues, originalData]);
 
   const handleDelete = (id: number): void => {
-    const newData = data.filter((row) => row.id !== id);
-    setData(newData);
+    const newData = originalData.filter((row) => row.id !== id);
+    setOriginalData(newData);
+  };
+
+  const handleEdit = (id: number, key: keyof T, value: string) => {
+    const updatedData = originalData.map((row) =>
+      row.id === id ? { ...row, [key]: value } : row
+    );
+    setOriginalData(updatedData);
   };
 
   const handleSort = (key: keyof T): void => {
@@ -77,9 +85,9 @@ const DynamicTable = <T extends { id: number }>({ initialData, initialColumns, i
   };
 
   return (
-    <div className="overflow-x-auto">
-      <table className="min-w-full bg-white border border-gray-200">
-        <thead>
+    <div className="overflow-x-auto h-[80vh]">
+      <table className="min-w-full bg-white border border-gray-200 ">
+        <thead className='sticky top-0 bg-white'>
           <tr>
             {columns.map((column, index) => (
               <ColumnHeader
@@ -112,7 +120,7 @@ const DynamicTable = <T extends { id: number }>({ initialData, initialColumns, i
             </tr>
           )}
         </thead>
-        <TableBody data={data} columns={columns} onDelete={handleDelete} />
+        <TableBody data={data} columns={columns} onDelete={handleDelete} onEdit={handleEdit} />
       </table>
     </div>
   );
