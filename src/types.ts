@@ -25,15 +25,15 @@ export interface Post {
   completed: boolean;
 }
 
-export interface RowData {
-  id: number;
-  name: string;
-  age: number;
-  email: string;
-}
+// export interface RowData {
+//   id: number;
+//   name: string;
+//   age: number;
+//   email: string;
+// }
 
-export interface Column {
-  key: keyof RowData;
+export interface Column<T> {
+  key: keyof T;
   label: string;
-  direction?: "asc" | "desc";
+  direction?: 'asc' | 'desc';
 }

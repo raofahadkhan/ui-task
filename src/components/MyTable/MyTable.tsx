@@ -1,46 +1,32 @@
 "use client";
 
-import React, { useState } from "react";
-import { RowData, Column } from "@/types";
-import { sortData, reorderColumns } from "@/utils/MyTable";
-import ColumnHeader from "@/components/MyTable/ColumnHeader";
-import TableBody from "@/components/MyTable/TableBody";
+import React, { useState } from 'react';
+import { Column } from '@/types';
+import { sortData, reorderColumns } from '@/utils/MyTable';
+import ColumnHeader from './ColumnHeader';
+import TableBody from './TableBody';
 
-const MyTable: React.FC = () => {
-  const [data, setData] = useState<RowData[]>([
-    { id: 1, name: "John Doe", age: 35, email: "john@example.com" },
-    { id: 2, name: "Jane Smith", age: 42, email: "jane@example.com" },
-    { id: 3, name: "Alex Johnson", age: 29, email: "alex@example.com" },
-  ]);
+interface DynamicTableProps<T extends { id: number }> {
+  initialData: T[];
+  initialColumns: Column<T>[];
+}
 
-  const [columns, setColumns] = useState<Column[]>([
-    { key: "id", label: "ID" },
-    { key: "name", label: "Name" },
-    { key: "age", label: "Age" },
-    { key: "email", label: "Email" },
-  ]);
-
-  const [sortConfig, setSortConfig] = useState<{
-    key: keyof RowData | null;
-    direction: "asc" | "desc" | null;
-  }>({ key: null, direction: null });
-
-  const [draggingColumnIndex, setDraggingColumnIndex] = useState<number | null>(
-    null
-  );
-  const [draggingOverColumnIndex, setDraggingOverColumnIndex] = useState<
-    number | null
-  >(null);
+const DynamicTable = <T extends { id: number }>({ initialData, initialColumns }: DynamicTableProps<T>) => {
+  const [data, setData] = useState<T[]>(initialData);
+  const [columns, setColumns] = useState<Column<T>[]>(initialColumns);
+  const [sortConfig, setSortConfig] = useState<{ key: keyof T | null; direction: 'asc' | 'desc' | null }>({ key: null, direction: null });
+  const [draggingColumnIndex, setDraggingColumnIndex] = useState<number | null>(null);
+  const [draggingOverColumnIndex, setDraggingOverColumnIndex] = useState<number | null>(null);
 
   const handleDelete = (id: number): void => {
     const newData = data.filter((row) => row.id !== id);
     setData(newData);
   };
 
-  const handleSort = (key: keyof RowData): void => {
-    let direction: "asc" | "desc" = "asc";
-    if (sortConfig.key === key && sortConfig.direction === "asc") {
-      direction = "desc";
+  const handleSort = (key: keyof T): void => {
+    let direction: 'asc' | 'desc' = 'asc';
+    if (sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
     }
     setSortConfig({ key, direction });
 
@@ -60,11 +46,7 @@ const MyTable: React.FC = () => {
 
   const handleDrop = () => {
     if (draggingColumnIndex !== null && draggingOverColumnIndex !== null) {
-      const reorderedColumns = reorderColumns(
-        columns,
-        draggingColumnIndex,
-        draggingOverColumnIndex
-      );
+      const reorderedColumns = reorderColumns(columns, draggingColumnIndex, draggingOverColumnIndex);
       setColumns(reorderedColumns);
     }
 
@@ -79,7 +61,7 @@ const MyTable: React.FC = () => {
           <tr>
             {columns.map((column, index) => (
               <ColumnHeader
-                key={column.key}
+                key={column.key.toString()}
                 column={column}
                 index={index}
                 onSort={handleSort}
@@ -97,4 +79,4 @@ const MyTable: React.FC = () => {
   );
 };
 
-export default MyTable;
+export default DynamicTable;

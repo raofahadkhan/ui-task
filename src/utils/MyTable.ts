@@ -1,11 +1,10 @@
-// utils.ts
-import { RowData, Column } from "@/types";
+import { Column } from "@/types";
 
-export const sortData = (
-  data: RowData[],
-  key: keyof RowData,
+export const sortData = <T>(
+  data: T[],
+  key: keyof T,
   direction: "asc" | "desc"
-): RowData[] => {
+): T[] => {
   return [...data].sort((a, b) => {
     if (a[key] < b[key]) {
       return direction === "asc" ? -1 : 1;
@@ -17,11 +16,11 @@ export const sortData = (
   });
 };
 
-export const reorderColumns = (
-  columns: Column[],
+export const reorderColumns = <T>(
+  columns: Column<T>[],
   fromIndex: number,
   toIndex: number
-): Column[] => {
+): Column<T>[] => {
   const reorderedColumns = [...columns];
   const [removed] = reorderedColumns.splice(fromIndex, 1);
   reorderedColumns.splice(toIndex, 0, removed);

@@ -1,24 +1,20 @@
-// TableBody.tsx
-import React from "react";
-import { RowData, Column } from "@/types";
+import React from 'react';
+import { Column } from '@/types';
 
-interface TableBodyProps {
-  data: RowData[];
-  columns: Column[];
+interface TableBodyProps<T extends { id: number }> {
+  data: T[];
+  columns: Column<T>[];
   onDelete: (id: number) => void;
 }
 
-const TableBody: React.FC<TableBodyProps> = ({ data, columns, onDelete }) => {
+const TableBody = <T extends { id: number }>({ data, columns, onDelete }: TableBodyProps<T>) => {
   return (
     <tbody>
       {data.map((row) => (
         <tr key={row.id}>
           {columns.map((column) => (
-            <td
-              key={`${row.id}-${column.key}`}
-              className="py-2 px-4 border-b text-center"
-            >
-              {row[column.key]}
+            <td key={`${row.id}-${column.key.toString()}`} className="py-2 px-4 border-b text-center">
+              {row[column.key] as React.ReactNode}
             </td>
           ))}
           <td className="py-2 px-4 border-b text-center">
