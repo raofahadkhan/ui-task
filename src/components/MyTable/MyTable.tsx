@@ -18,6 +18,7 @@ const DynamicTable = <T extends { id: number }>({ initialData, initialColumns }:
   const [draggingColumnIndex, setDraggingColumnIndex] = useState<number | null>(null);
   const [draggingOverColumnIndex, setDraggingOverColumnIndex] = useState<number | null>(null);
   const [filterValues, setFilterValues] = useState<{ [key in keyof T]?: string }>({});
+  const [isFilterRowVisible, setIsFilterRowVisible] = useState(false);
 
   useEffect(() => {
     const filteredData = initialData.filter((row) =>
@@ -75,8 +76,21 @@ const DynamicTable = <T extends { id: number }>({ initialData, initialColumns }:
     setFilterValues((prev) => ({ ...prev, [key]: value }));
   };
 
+  const toggleFilterRow = () => {
+    setIsFilterRowVisible(!isFilterRowVisible);
+  };
+
   return (
     <div className="overflow-x-auto">
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-2xl font-bold">My Custom Table</h1>
+        <button
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded"
+          onClick={toggleFilterRow}
+        >
+          {isFilterRowVisible ? 'Hide Filters' : 'Show Filters'}
+        </button>
+      </div>
       <table className="min-w-full bg-white border border-gray-200">
         <thead>
           <tr>
@@ -93,20 +107,22 @@ const DynamicTable = <T extends { id: number }>({ initialData, initialColumns }:
             ))}
             <th className="py-2 px-4 border-b text-center">Actions</th>
           </tr>
-          <tr>
-            {columns.map((column) => (
-              <th key={`filter-${column.key.toString()}`} className="py-2 px-4 border-b">
-                <input
-                  type="text"
-                  className="w-full border rounded p-1"
-                  placeholder={`Filter by ${column.label}`}
-                  value={filterValues[column.key] || ''}
-                  onChange={(e) => handleFilterChange(column.key, e.target.value)}
-                />
-              </th>
-            ))}
-            <th className="py-2 px-4 border-b text-center"></th>
-          </tr>
+          {isFilterRowVisible && (
+            <tr className="bg-gray-50">
+              {columns.map((column) => (
+                <th key={`filter-${column.key.toString()}`} className="py-2 px-4 border-b">
+                  <input
+                    type="text"
+                    className="w-full border border-gray-300 rounded p-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder={`Filter by ${column.label}`}
+                    value={filterValues[column.key] || ''}
+                    onChange={(e) => handleFilterChange(column.key, e.target.value)}
+                  />
+                </th>
+              ))}
+              <th className="py-2 px-4 border-b text-center"></th>
+            </tr>
+          )}
         </thead>
         <TableBody data={data} columns={columns} onDelete={handleDelete} />
       </table>

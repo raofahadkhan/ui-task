@@ -25,7 +25,7 @@ const App: React.FC = () => {
 
   return (
     <main className="p-8">
-      <h1 className="text-2xl font-bold mb-4">My Custom Table</h1>
+      <h1 className="text-2xl font-bold mb-4">UI TASK GIVEN BY VICTOR</h1>
       <DynamicTable initialData={data} initialColumns={columns} />
     </main>
   );
