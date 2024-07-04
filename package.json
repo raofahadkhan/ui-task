@@ -9,21 +9,23 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@tanstack/react-table": "^8.19.2",
-    "next": "14.2.4",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@mui/icons-material": "^5.15.19",
     "@mui/material": "^5.15.19",
     "@mui/x-date-pickers": "^7.6.1",
+    "@tanstack/react-table": "^8.19.2",
     "dayjs": "^1.11.11",
     "material-react-table": "^2.13.0",
+    "next": "14.2.4",
     "react": "^18.3.1",
+    "react-beautiful-dnd": "13.0.0",
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^18",
+    "@types/react-beautiful-dnd": "^13.1.8",
     "@types/react-dom": "^18",
     "eslint": "^8",
     "eslint-config-next": "14.2.4",
