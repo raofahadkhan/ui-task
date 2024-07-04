@@ -92,7 +92,7 @@ const DynamicTable = <T extends { id: number }>({
       );
       setColumns(reorderedColumns);
     }
-
+    
     setDraggingColumnIndex(null);
     setDraggingOverColumnIndex(null);
   };
@@ -131,7 +131,7 @@ const DynamicTable = <T extends { id: number }>({
                     type="text"
                     className="w-full border border-gray-300 rounded p-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder={`Filter by ${column.label}`}
-                    value={filterValues[column.key] || ""}
+                    value={filterValues[column.key]}
                     onChange={(e) =>
                       handleFilterChange(column.key, e.target.value)
                     }
