@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Column } from '@/types';
 import { sortData, reorderColumns } from '@/utils/MyTable';
 import ColumnHeader from './ColumnHeader';
@@ -17,6 +17,23 @@ const DynamicTable = <T extends { id: number }>({ initialData, initialColumns }:
   const [sortConfig, setSortConfig] = useState<{ key: keyof T | null; direction: 'asc' | 'desc' | null }>({ key: null, direction: null });
   const [draggingColumnIndex, setDraggingColumnIndex] = useState<number | null>(null);
   const [draggingOverColumnIndex, setDraggingOverColumnIndex] = useState<number | null>(null);
+  const [filterValues, setFilterValues] = useState<{ [key in keyof T]?: string }>({});
+
+  useEffect(() => {
+    const filteredData = initialData.filter((row) =>
+      Object.keys(filterValues).every((filterKey) => {
+        const filterValue = filterValues[filterKey as keyof T];
+        if (filterValue) {
+          return row[filterKey as keyof T]
+            ?.toString()
+            ?.toLowerCase()
+            .includes(filterValue.toLowerCase());
+        }
+        return true;
+      })
+    );
+    setData(filteredData);
+  }, [filterValues, initialData]);
 
   const handleDelete = (id: number): void => {
     const newData = data.filter((row) => row.id !== id);
@@ -54,6 +71,10 @@ const DynamicTable = <T extends { id: number }>({ initialData, initialColumns }:
     setDraggingOverColumnIndex(null);
   };
 
+  const handleFilterChange = (key: keyof T, value: string) => {
+    setFilterValues((prev) => ({ ...prev, [key]: value }));
+  };
+
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full bg-white border border-gray-200">
@@ -71,6 +92,20 @@ const DynamicTable = <T extends { id: number }>({ initialData, initialColumns }:
               />
             ))}
             <th className="py-2 px-4 border-b text-center">Actions</th>
+          </tr>
+          <tr>
+            {columns.map((column) => (
+              <th key={`filter-${column.key.toString()}`} className="py-2 px-4 border-b">
+                <input
+                  type="text"
+                  className="w-full border rounded p-1"
+                  placeholder={`Filter by ${column.label}`}
+                  value={filterValues[column.key] || ''}
+                  onChange={(e) => handleFilterChange(column.key, e.target.value)}
+                />
+              </th>
+            ))}
+            <th className="py-2 px-4 border-b text-center"></th>
           </tr>
         </thead>
         <TableBody data={data} columns={columns} onDelete={handleDelete} />
