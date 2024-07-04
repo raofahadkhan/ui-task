@@ -10,7 +10,7 @@ interface Todo {
   completed: boolean;
 }
 
-const App: React.FC = () => {
+const Page: React.FC = () => {
   const [data, setData] = useState<Todo[]>([]);
   const [isFilterRowVisible, setIsFilterRowVisible] = useState(false);
 
@@ -57,4 +57,4 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+export default Page;
