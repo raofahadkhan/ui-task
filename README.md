@@ -13,7 +13,7 @@ This project is a UI task built with Next.js and Tailwind CSS. It includes dynam
 First, you need to clone the repository to your local machine.
 
 ```bash
-git clone <repository-url>
+git clone [<repository-url>](https://github.com/raofahadkhan/ui-task.git)
 ```
 
 ### Step 2: Navigate to the Project Directory
