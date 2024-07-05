@@ -49,5 +49,3 @@ Open your browser and navigate to http://localhost:3000 to view the application.
 Material React Table: http://localhost:3000/
 
 Custom Table: http://localhost:3000/table
-
-

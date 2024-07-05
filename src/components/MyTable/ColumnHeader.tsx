@@ -23,12 +23,12 @@ const ColumnHeader = <T,>({
   return (
     <th
       key={column.key.toString()}
-      className={`py-2 px-4 border-b cursor-pointer text-center ${className}`} // Apply className
+      className={`py-2 px-4 border-b cursor-pointer text-center ${className}`}
       draggable
       onClick={() => onSort(column.key)}
       onDragStart={() => onDragStart(index)}
       onDragOver={(e) => {
-        e.preventDefault(); // Allow drop
+        e.preventDefault();
         onDragOver(index);
       }}
       onDrop={onDrop}
